@@ -3,6 +3,7 @@ import com.challenge.adapter.api.exception.InvalidCsvContentException;
 import com.challenge.adapter.api.mapper.ProductApiMapper;
 import com.challenge.adapter.api.model.PagedResponse;
 import com.challenge.adapter.api.model.ProductDto;
+import com.challenge.adapter.api.validator.CsvFileValidator;
 import com.challenge.ports.in.ProductUCPort;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ProductController {
 
     private final ProductUCPort productUCPort;
     private final ProductApiMapper mapper  = Mappers.getMapper(ProductApiMapper .class);;
+    private final CsvFileValidator validator;
 
     @GetMapping("/{client_code}")
     public ResponseEntity<PagedResponse<ProductDto>> getProducts(
@@ -44,8 +46,8 @@ public class ProductController {
             log.error("Uploaded file is empty.");
             throw new InvalidCsvContentException("Uploaded file is empty.");
         }
-        //TODO: validate csv
-
+        var validatedProducts = validator.validate(file.getInputStream());
+        productUCPort.saveAllProducts(clientCode, mapper.toModel(validatedProducts));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
