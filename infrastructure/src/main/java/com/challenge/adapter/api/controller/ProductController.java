@@ -4,6 +4,8 @@ import com.challenge.adapter.api.mapper.ProductApiMapper;
 import com.challenge.adapter.api.model.PagedResponse;
 import com.challenge.adapter.api.model.ProductDto;
 import com.challenge.adapter.api.validator.CsvFileValidator;
+import com.challenge.model.PagedProduct;
+import com.challenge.model.Product;
 import com.challenge.ports.in.ProductUCPort;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +34,9 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
+        PagedProduct<Product> products = productUCPort.getProductsByClient(clientCode,page, size);
 
-        return null;
+        return ResponseEntity.ok(mapper.toPagedResponse(products));
     }
 
 
