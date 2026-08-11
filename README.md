@@ -85,3 +85,16 @@ A single default Spring profile (application.properties) is provided for launchi
 Unit tests are implemented across critical layers (Domain models and REST Controllers).
 
 Note: Comprehensive, production-grade test coverage is prioritized after core business rules and infrastructure boundaries are stabilized.
+
+### To run the application
+
+mvn spring-boot:run -pl infrastructure
+
+### Test endpoints
+
+* **GET:** 
+postman request 'http://localhost:8080/api/v1/products/client101?page=0&size=10'
+
+* **POST:**
+  postman request POST 'http://localhost:8080/api/v1/products/upload/client101' \
+  --form 'file=@/home/nearshore/products.csv'
